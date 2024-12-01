@@ -1,0 +1,41 @@
+Most similar words to cactus:
+creticus: 0.9831
+cantus: 0.9829
+cercocarpus: 0.9827
+carcasses: 0.9825
+crescentic: 0.9823
+
+Most similar words to cake:
+fruitcake: 1.0000
+cakebread: 0.9798
+cakewalk: 0.9794
+mooncake: 0.9783
+cakey: 0.9757
+
+Most similar words to angry:
+ryang: 1.0000
+ryanggang: 0.9932
+mlanghenry: 0.9872
+yungang: 0.9867
+yanchang: 0.9863
+
+Most similar words to quickly:
+quickies: 0.9838
+quick-fire: 0.9818
+quickness: 0.9811
+quickie: 0.9810
+quickplay: 0.9807
+
+Most similar words to between:
+inbetween: 0.9815
+betweenness: 0.9790
+inbetweeners: 0.9704
+in-between: 0.9681
+go-between: 0.9675
+
+Most similar words to the:
+theorem: 1.0000
+theocrats: 1.0000
+andthe: 0.9822
+thet: 0.9822
+bythe: 0.9821

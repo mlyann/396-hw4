@@ -29,27 +29,30 @@ def tokenize_texts(texts, batch_size=16):
         tokenized_texts.append(inputs)
     return tokenized_texts
 
-def generate_average_embeddings(tokenized_texts):
+
+def generate_average_embeddings(tokenized_texts, output_file="result_partial.csv"):
     token_embeddings = defaultdict(list)
-    
+    batch_results = []
+
     with torch.no_grad():
-        for inputs in tqdm(tokenized_texts, desc="Generating Embeddings"):
-            outputs = model(**inputs)
-            hidden_states = outputs.last_hidden_state 
-            
-            for i in range(inputs['input_ids'].shape[0]):
-                tokens = tokenizer.convert_ids_to_tokens(inputs['input_ids'][i].cpu().numpy())
-                hidden_state = hidden_states[i].cpu().numpy()
-                
-                for j, token in enumerate(tokens):
-                    token_embeddings[token].append(hidden_state[j])
-    
-    average_embeddings = {token: np.mean(embeds, axis=0) for token, embeds in token_embeddings.items()}
-    return average_embeddings
+        for batch_inputs in tqdm(tokenized_texts, desc="Generating Embeddings"):
+            outputs = model(**batch_inputs)
+            hidden_states = outputs.last_hidden_state.cpu().numpy()
+
+            for input_ids, hidden_state in zip(batch_inputs['input_ids'], hidden_states):
+                tokens = tokenizer.convert_ids_to_tokens(input_ids.cpu().numpy())
+                for token, embedding in zip(tokens, hidden_state):
+                    token_embeddings[token].append(embedding)
+
+        # Write intermediate results to disk
+        batch_results.append({token: np.mean(embeds, axis=0).tolist() for token, embeds in token_embeddings.items()})
+        pd.DataFrame(batch_results).to_csv(output_file, mode='a', index=False, header=False)
+        token_embeddings.clear()  # Free memory
+
 
 def main():
     dataset_path = 'assignment4-dataset.txt'
-    texts = load_dataset(dataset_path, sample_size=100000000)
+    texts = load_dataset(dataset_path, sample_size=1000000)
     tokenized_texts = tokenize_texts(texts)
     average_embeddings = generate_average_embeddings(tokenized_texts)
 
